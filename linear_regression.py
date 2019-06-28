@@ -4,10 +4,13 @@ import argparse
 import numpy as np
 
 from inputs import Data
+from algo_linear import Algo
+
 
 def ft_errors(message):
 	print(message)
 	sys.exit(0)
+
 
 def ft_argparser():
 	parser = argparse.ArgumentParser()
@@ -25,15 +28,14 @@ def main(args):
 		lines = file.readlines()
 
 	data = Data(lines)
-	print(data.km)
-	print(data.price)
-	print(data.features)
-	print(data.theta)
+	model = Algo(X=data.features, y=data.price)
+	model.fit_linear(alpha=0.01, iter=1000)
+	print(model.theta)
 
 	return None
 
 
-
 if __name__ == "__main__":
+	np.set_printoptions(suppress=True)
 	args = ft_argparser()
 	main(args)
