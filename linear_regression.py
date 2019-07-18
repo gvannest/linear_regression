@@ -15,7 +15,9 @@ def ft_errors(message):
 def ft_argparser():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("data_file", type=str, help="csv file containing the training examples which will feed the linear_regression algorithm")
-	# parser.add_argument("-i", "--interactive", action="store_true", help="Interactive facts mode, where the user can change facts or add new facts")
+	parser.add_argument("-i", "--iterations", type=int, default=200, help="fix number of iterations")
+	parser.add_argument("-a", "--alpha", type=float, default=1, help="fix size of Gradient Descent step")
+	parser.add_argument("-p", "--plot", action="store_true", help="Draw a plot of cost function as GD advances")
 	args = parser.parse_args()
 	return args
 
@@ -25,11 +27,12 @@ def main(args):
 	with open(args.data_file) as file:
 		lines = file.readlines()
 
+	Algo.flag_plot = True if args.plot else False
 	data = Data(lines)
 	model = Algo(X=data.features, y=data.price)
-	model.fit_linear(alpha=0.1, iter=1000)
+	model.fit_linear(alpha=args.alpha, iter=args.iterations)
+	print(model.theta_norm)
 	print(model.theta)
-	#dump les theta en pkl. denormaliser les thetas avant
 
 	return None
 
