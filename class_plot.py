@@ -25,7 +25,7 @@ class GraphLive:
 		self.ax.set_xlabel(self.x_label)
 		self.ax.set_title(self.title)
 
-	def live_line_evolution(self, y_limit=None, x_limit=None, pause_time=0.005):
+	def live_line_evolution(self, y_limit=None, x_limit=None, pause_time=0.002):
 		if not self.line:
 			plt.ion()
 			self.initialization(y_limit, x_limit)
@@ -36,7 +36,7 @@ class GraphLive:
 		plt.pause(pause_time)
 		return None
 
-	def live_regression(self, y_limit=None, x_limit=None, theta=None, pause_time=0.005):
+	def live_regression(self, y_limit=None, x_limit=None, theta=None, pause_time=0.002):
 		x_reg = np.array([0, 1.2 * np.max(self.x_vec, axis=0)])
 		y_reg = theta[0] + theta[1] * x_reg
 		if not self.line:
@@ -50,15 +50,29 @@ class GraphLive:
 		plt.pause(pause_time)
 		return None
 
-	def live_gd(self, f, pause_time=0.005):
-		max_y = np.max(self.y_vec, axis=0)
-		min_y = np.min(self.y_vec, axis=0)
-		y_range = abs(max_y - min_y)
-		theta0_range = np.arange(-1.2 * max_y, 1.2 * max_y)
-		theta1_range = np.arange(-y_range, y_range)
+	def draw_contour(self, f, theta=None, pause_time=0.002):
+		if not self.line:
+			plt.ion()
+			y_min = np.min(self.y_vec)
+			y_max = np.max(self.y_vec)
+			x_min = np.min(self.x_vec)
+			x_max = np.max(self.x_vec)
+			self.initialization(y_limit=(y_min, y_max), x_limit=(x_min, x_max))
+			J_grid = f(self.x_vec[np.newaxis, :, np.newaxis], self.y_vec[:, np.newaxis, np.newaxis])
+			T0, T1 = np.meshgrid(self.x_vec, self.y_vec)
+			# Z = np.array([f(np.array([t0,t1]).reshape(-1,1)) for t0, t1 in zip(np.ravel(T0), np.ravel(T1))])
+			# Z = Z.reshape(T0.shape)
+			self.ax.contour(T0, T1, J_grid, 20, cmap='RdGy')
+			self.line, = self.ax.plot(theta[0], theta[1], '-', alpha=0.8)
+			plt.show()
+		x_data = self.line.get_xdata()
+		y_data = self.line.get_ydata()
+		self.line.set_xdata(np.insert(x_data, -1, theta[0]))
+		self.line.set_ydata(np.insert(y_data, -1, theta[1]))
+		plt.pause(pause_time)
+		return None
 
-		x1, x0 = np.meshgrid(theta1_range, theta0_range)
-		plt.contour(x1, x0, f(self.x_vec,(x1,x0)), 20, cmap='RdGy')
+
 
 	@classmethod
 	def close(cls):
