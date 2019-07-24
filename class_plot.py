@@ -58,17 +58,17 @@ class GraphLive:
 			x_min = np.min(self.x_vec)
 			x_max = np.max(self.x_vec)
 			self.initialization(y_limit=(y_min, y_max), x_limit=(x_min, x_max))
-			J_grid = f(self.x_vec[np.newaxis, :, np.newaxis], self.y_vec[:, np.newaxis, np.newaxis])
 			T0, T1 = np.meshgrid(self.x_vec, self.y_vec)
-			# Z = np.array([f(np.array([t0,t1]).reshape(-1,1)) for t0, t1 in zip(np.ravel(T0), np.ravel(T1))])
-			# Z = Z.reshape(T0.shape)
-			self.ax.contour(T0, T1, J_grid, 20, cmap='RdGy')
+			Z = np.array([f(np.array([t0,t1])) for t0, t1 in zip(np.ravel(T0), np.ravel(T1))])
+			Z = Z.reshape(T0.shape)
+			self.ax.contour(T0, T1, Z, 20, cmap='RdGy')
 			self.line, = self.ax.plot(theta[0], theta[1], '-', alpha=0.8)
 			plt.show()
 		x_data = self.line.get_xdata()
 		y_data = self.line.get_ydata()
-		self.line.set_xdata(np.insert(x_data, -1, theta[0]))
-		self.line.set_ydata(np.insert(y_data, -1, theta[1]))
+		self.line.set_xdata(np.r_[x_data, theta[0]])
+		self.line.set_ydata(np.r_[y_data, theta[1]])
+
 		plt.pause(pause_time)
 		return None
 
