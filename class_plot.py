@@ -36,13 +36,16 @@ class GraphLive:
 		plt.pause(pause_time)
 		return None
 
-	def live_regression(self, y_limit=None, x_limit=None, theta=None, pause_time=0.002):
+	def live_regression(self, y_limit=None, x_limit=None, theta=None, true_theta=None, pause_time=0.002):
 		x_reg = np.array([0, 1.2 * np.max(self.x_vec, axis=0)])
 		y_reg = theta[0] + theta[1] * x_reg
 		if not self.line:
 			plt.ion()
 			self.initialization(y_limit, x_limit)
 			self.line, = self.ax.plot(x_reg, y_reg, '-', alpha=0.8)
+			if true_theta is not None:
+				y_true = true_theta[0] + true_theta[1] * x_reg
+				line_true, = self.ax.plot(x_reg, y_true, '-', color="green", alpha=0.3)
 			self.ax.scatter(self.x_vec, self.y_vec, c='blue')
 			plt.tight_layout(4, h_pad=3)
 			plt.show()

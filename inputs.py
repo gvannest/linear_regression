@@ -2,16 +2,18 @@ import numpy as np
 
 class Data:
 
-	def __init__(self, lines):
-		self.km = np.asarray(self.parse_lines(lines)[0], dtype=int)
-		self.price = np.asarray(self.parse_lines(lines)[1], dtype=int)
+	def __init__(self, array_lines):
+		self.km = array_lines[:,0]
+		self.price = array_lines[:,1]
 		self.features = np.c_[np.ones(len(self.km)), self.km]
+		self.true_theta = None
 
-	def parse_lines(self, lines):
-		new_lines = [e.strip().split(',') for e in lines[1:]]
-		list_km = [int(e[0]) for e in new_lines]
-		list_price = [int(e[1]) for e in new_lines]
-		return list_km, list_price
+	def normal_equation(self):
+		self.true_theta = np.linalg.inv((np.transpose(self.features).dot(self.features)))\
+			.dot(np.transpose(self.features))\
+			.dot(self.price)
+
+		return None
 
 
 

@@ -4,7 +4,7 @@ import argparse
 import numpy as np
 
 from inputs import Data
-from algo_linear import Algo
+import algo_linear
 
 
 def ft_errors(message):
@@ -25,14 +25,18 @@ def ft_argparser():
 
 def main(args):
 
-	with open(args.data_file) as file:
-		lines = file.readlines()
+	array_lines = np.genfromtxt(args.data_file, delimiter=',', skip_header=1)
 
-	Algo.flag_plot = True if args.plot else False
-	Algo.gd_algo = args.method
-	data = Data(lines)
-	model = Algo(X=data.features, y=data.price)
+	algo_linear.Algo.flag_plot = True if args.plot else False
+	algo_linear.Algo.gd_algo = args.method
+
+	data = Data(array_lines)
+	data.normal_equation()
+	print(data.true_theta)
+
+	model = algo_linear.Algo(X=data.features, y=data.price, true_theta=data.true_theta)
 	model.fit_linear(alpha=args.alpha, iter=args.iterations)
+	print(model.theta)
 
 	return None
 

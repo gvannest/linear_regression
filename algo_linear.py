@@ -3,19 +3,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from class_plot import GraphLive
+import linear_regression
 
 class Algo:
 
 	flag_plot = False
 	gd_algo = ''
 
-	def __init__(self, X=None, y=None):
+	def __init__(self, X=None, y=None, true_theta=None):
 		self.X = X
 		self.y = y
 		self.theta_norm = np.zeros(self.X.shape[1], dtype=float)
 		self.theta = np.zeros(self.X.shape[1], dtype=float)
 		self.X_norm, self.mean_, self.range_ = self.feature_normalization()
 		self.J_history = []
+		self.true_theta = true_theta
 
 	def feature_normalization(self):
 		mean_ = np.sum(self.X[:, 1:]) / self.X.shape[0]
@@ -32,25 +34,22 @@ class Algo:
 	def cost_sgd(self, theta, e=0):
 		return np.square(self.predict(self.X_norm[e], theta) - self.y[e]) / 2
 
-	def dynamic_plots(self, iter, i, mv_avg=10, **kwargs):
+	def cost_mbgd(self, X, y, theta):
+		return np.sum(np.square(self.predict(X, theta) - y)) / (2 * X.size)
+
+	def dynamic_plots(self, iter, i, mv_avg=None, **kwargs):
 		self.theta[0] = self.theta_norm[0] - self.theta_norm[1] * self.mean_ / self.range_
 		self.theta[1] = self.theta_norm[1] / self.range_
 
-		if Algo.gd_algo == "BGD":
-			kwargs['g1'].y_vec[i] = self.J_history[-1]
-			kwargs['g1'].live_line_evolution(y_limit=(0, self.cost_bgd(self.theta_norm)), x_limit=(0, iter))
-			kwargs['g2'].live_regression(y_limit=(0, 1.2 * np.max(self.y, axis=0)),
-										 x_limit=(0, 1.2 * np.max(self.X[:, 1], axis=0)),
-										 theta=self.theta)
-			kwargs['g3'].draw_contour(self.cost_bgd, theta=self.theta_norm)
-
-		elif Algo.gd_algo == "SGD":
+		if Algo.gd_algo == "SGD":
 			kwargs['g1'].y_vec[i] = np.sum(np.array([self.J_history[-a] for a in range(1, mv_avg+1)])) / mv_avg
-			kwargs['g1'].live_line_evolution(y_limit=(0, self.J_history[0]), x_limit=(0, iter))
-			kwargs['g2'].live_regression(y_limit=(0, 1.2 * np.max(self.y, axis=0)),
-										 x_limit=(0, 1.2 * np.max(self.X[:, 1], axis=0)),
-										 theta=self.theta)
-			kwargs['g3'].draw_contour(self.cost_bgd, theta=self.theta_norm)
+		else:
+			kwargs['g1'].y_vec[i] = self.J_history[-1]
+		kwargs['g1'].live_line_evolution(y_limit=(0, self.J_history[0]), x_limit=(0, iter))
+		kwargs['g2'].live_regression(y_limit=(0, 1.2 * np.max(self.y, axis=0)),
+									 x_limit=(0, 1.2 * np.max(self.X[:, 1], axis=0)),
+									 theta=self.theta, true_theta=self.true_theta)
+		kwargs['g3'].draw_contour(self.cost_bgd, theta=self.theta_norm)
 
 		return None
 
@@ -58,8 +57,8 @@ class Algo:
 	def batch_gradient(self, alpha, iter, m, **kwargs):
 		for i in range(iter):
 			diff = np.dot(self.predict(self.X_norm, self.theta_norm) - self.y, self.X_norm)
-			self.J_history.append(self.cost_bgd(self.theta_norm))
 			self.theta_norm = self.theta_norm - (alpha / m) * diff
+			self.J_history.append(self.cost_bgd(self.theta_norm))
 
 			if Algo.flag_plot:
 				self.dynamic_plots(iter, i, **kwargs)
@@ -67,8 +66,8 @@ class Algo:
 		return None
 
 
-	def stochastic_gradient(self, alpha, iter, m, mv_avg=10, **kwargs):
-		index_array = np.arrange(m)
+	def stochastic_gradient(self, alpha, iter, m, mv_avg=1, **kwargs):
+		index_array = np.arange(m)
 		np.random.shuffle(index_array)
 		run = 0
 		for i in range(iter):
@@ -78,8 +77,9 @@ class Algo:
 				self.J_history.append(self.cost_sgd(self.theta_norm, e))
 				self.theta_norm = self.theta_norm - alpha * diff
 
-				if Algo.flag_plot and not run % mv_avg :
-					self.dynamic_plots(iter, i, mv_avg, **kwargs)
+			if Algo.flag_plot :
+				self.dynamic_plots(iter, i, mv_avg, **kwargs)
+			# and not run % mv_avg
 
 		return None
 
@@ -87,23 +87,33 @@ class Algo:
 	def mb_gradient(self, alpha, iter, m, **kwargs):
 
 		def ft_get_batch(X, y, b=10):
-			while 1:
-
+			if b > m:
+				linear_regressioin.ft_errors("Batch size cannot exceed number of training examples.")
+			start = 0
+			batch_i = b
+			while batch_i <= m:
+				X_batch = X[start:batch_i,:]
+				y_batch = y[start:batch_i]
+				batch_i += b
+				start += b
+				yield X_batch, y_batch
+			if start < m:
+				X_batch = X[start:,:]
+				y_batch = y[start:]
+				yield X_batch, y_batch
 
 		concat_array = np.c_[self.X_norm, self.y]
 		np.random.shuffle(concat_array)
 		self.X_norm = concat_array[:, :-1]
 		self.y = concat_array[:, -1]
-		run = 0
 		for i in range(iter):
-			for e in range(m):
-				run += 1
-				diff = np.dot(self.predict(self.X_norm[e], self.theta_norm) - self.y[e], self.X_norm[e])
-				self.J_history.append(self.cost_sgd(self.theta_norm, e))
-				self.theta_norm = self.theta_norm - alpha * diff
+			for X_batch, y_batch in ft_get_batch(self.X_norm, self.y):
+				diff = np.dot(self.predict(X_batch, self.theta_norm) - y_batch, X_batch)
+				self.J_history.append(self.cost_mbgd(X_batch, y_batch, self.theta_norm))
+				self.theta_norm = self.theta_norm - (alpha / X_batch.size) * diff
 
-				if Algo.flag_plot and not run % mv_avg :
-					self.dynamic_plots(iter, i, **kwargs)
+			if Algo.flag_plot:
+				self.dynamic_plots(iter, i, **kwargs)
 
 		return None
 
