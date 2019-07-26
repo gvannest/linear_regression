@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a45493eb-ffec-453d-bb42-d21d37251eb6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/J_history.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/algo_linear.py" beforeDir="false" afterPath="$PROJECT_DIR$/algo_linear.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/class_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/class_plot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inputs.py" beforeDir="false" afterPath="$PROJECT_DIR$/inputs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/linear_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/linear_regression.py" afterDir="false" />
     </list>
@@ -16,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5316002">
+    <splitter split-orientation="horizontal" split-proportion="0.51502913">
       <split-first>
         <splitter split-orientation="horizontal" split-proportion="0.22956522">
           <split-first>
@@ -37,11 +35,8 @@
               <file pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/linear_regression.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="540">
-                      <caret line="36" column="86" selection-start-line="36" selection-start-column="86" selection-end-line="36" selection-end-column="86" />
-                      <folding>
-                        <element signature="e#0#10#0" expanded="true" />
-                      </folding>
+                    <state relative-caret-position="495">
+                      <caret line="39" column="64" selection-start-line="39" selection-start-column="64" selection-end-line="39" selection-end-column="64" />
                     </state>
                   </provider>
                 </entry>
@@ -49,8 +44,8 @@
               <file pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/class_plot.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="439">
-                      <caret line="46" column="62" lean-forward="true" selection-start-line="46" selection-start-column="62" selection-end-line="46" selection-end-column="62" />
+                    <state relative-caret-position="371">
+                      <caret line="49" column="40" lean-forward="true" selection-start-line="49" selection-start-column="40" selection-end-line="49" selection-end-column="40" />
                     </state>
                   </provider>
                 </entry>
@@ -64,8 +59,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/inputs.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="225">
-                  <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
+                <state relative-caret-position="300">
+                  <caret line="20" column="18" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
                 </state>
               </provider>
             </entry>
@@ -73,11 +68,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/algo_linear.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="531">
-                  <caret line="68" column="58" selection-start-line="68" selection-start-column="58" selection-end-line="68" selection-end-column="58" />
-                  <folding>
-                    <element signature="e#0#18#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="440">
+                  <caret line="75" selection-start-line="75" selection-end-line="75" />
                 </state>
               </provider>
             </entry>
@@ -90,12 +82,13 @@
     <findStrings>
       <find>self.y</find>
       <find>Graph</find>
-      <find>print</find>
       <find>predict(self, theta):</find>
       <find>cost</find>
       <find>predict</find>
       <find>self.cost</find>
       <find>ft_errors</find>
+      <find>mv_av</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -104,9 +97,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/class_plot.py" />
         <option value="$PROJECT_DIR$/inputs.py" />
         <option value="$PROJECT_DIR$/linear_regression.py" />
-        <option value="$PROJECT_DIR$/class_plot.py" />
         <option value="$PROJECT_DIR$/algo_linear.py" />
       </list>
     </option>
@@ -130,6 +123,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -141,7 +135,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -187,16 +180,17 @@
       <workItem from="1563447214354" duration="13905000" />
       <workItem from="1563807683636" duration="2881000" />
       <workItem from="1563877477259" duration="5632000" />
+      <workItem from="1564124319057" duration="5690000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="70902000" />
+    <option name="totallyTimeSpent" value="76592000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="2560" height="1440" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11382434" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11477363" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -234,35 +228,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inputs.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
+        <state relative-caret-position="300">
+          <caret line="20" column="18" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/linear_regression.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="36" column="86" selection-start-line="36" selection-start-column="86" selection-end-line="36" selection-end-column="86" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="495">
+          <caret line="39" column="64" selection-start-line="39" selection-start-column="64" selection-end-line="39" selection-end-column="64" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/class_plot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="46" column="62" lean-forward="true" selection-start-line="46" selection-start-column="62" selection-end-line="46" selection-end-column="62" />
+        <state relative-caret-position="371">
+          <caret line="49" column="40" lean-forward="true" selection-start-line="49" selection-start-column="40" selection-end-line="49" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/algo_linear.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="531">
-          <caret line="68" column="58" selection-start-line="68" selection-start-column="58" selection-end-line="68" selection-end-column="58" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="440">
+          <caret line="75" selection-start-line="75" selection-end-line="75" />
         </state>
       </provider>
     </entry>

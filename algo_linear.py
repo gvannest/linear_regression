@@ -9,6 +9,8 @@ class Algo:
 
 	flag_plot = False
 	gd_algo = ''
+	mv_avg = 10
+	batch_size = 10
 
 	def __init__(self, X=None, y=None, true_theta=None):
 		self.X = X
@@ -37,12 +39,12 @@ class Algo:
 	def cost_mbgd(self, X, y, theta):
 		return np.sum(np.square(self.predict(X, theta) - y)) / (2 * X.size)
 
-	def dynamic_plots(self, iter, i, mv_avg=None, **kwargs):
+	def dynamic_plots(self, iter, i, **kwargs):
 		self.theta[0] = self.theta_norm[0] - self.theta_norm[1] * self.mean_ / self.range_
 		self.theta[1] = self.theta_norm[1] / self.range_
 
 		if Algo.gd_algo == "SGD":
-			kwargs['g1'].y_vec[i] = np.sum(np.array([self.J_history[-a] for a in range(1, mv_avg+1)])) / mv_avg
+			kwargs['g1'].y_vec[i] = np.sum(np.array([self.J_history[-a] for a in range(1, Algo.mv_avg + 1)])) / Algo.mv_avg
 		else:
 			kwargs['g1'].y_vec[i] = self.J_history[-1]
 		kwargs['g1'].live_line_evolution(y_limit=(0, self.J_history[0]), x_limit=(0, iter))
@@ -66,47 +68,55 @@ class Algo:
 		return None
 
 
-	def stochastic_gradient(self, alpha, iter, m, mv_avg=1, **kwargs):
+	def stochastic_gradient(self, alpha, iter, m, **kwargs):
+
+		def learning_rate_decay(epoch):
+			return 1/ (3 + epoch)
+
 		index_array = np.arange(m)
-		np.random.shuffle(index_array)
 		run = 0
 		for i in range(iter):
+			np.random.shuffle(index_array)
 			for e in index_array:
 				run += 1
 				diff = np.dot(self.predict(self.X_norm[e], self.theta_norm) - self.y[e], self.X_norm[e])
 				self.J_history.append(self.cost_sgd(self.theta_norm, e))
 				self.theta_norm = self.theta_norm - alpha * diff
+			alpha = learning_rate_decay(i)
 
 			if Algo.flag_plot :
-				self.dynamic_plots(iter, i, mv_avg, **kwargs)
-			# and not run % mv_avg
-
+				self.dynamic_plots(iter, i, **kwargs)
 		return None
 
 
 	def mb_gradient(self, alpha, iter, m, **kwargs):
 
-		def ft_get_batch(X, y, b=10):
+		def ft_shuffle_data():
+			concat_array = np.c_[self.X_norm, self.y]
+			np.random.shuffle(concat_array)
+			self.X_norm = concat_array[:, :-1]
+			self.y = concat_array[:, -1]
+
+		def ft_get_batch(X, y, b=Algo.batch_size):
 			if b > m:
 				linear_regressioin.ft_errors("Batch size cannot exceed number of training examples.")
 			start = 0
 			batch_i = b
+			X_batch = []
+			y_batch = []
 			while batch_i <= m:
-				X_batch = X[start:batch_i,:]
-				y_batch = y[start:batch_i]
+				X_batch.append(X[start:batch_i,:])
+				y_batch.append(y[start:batch_i])
 				batch_i += b
 				start += b
-				yield X_batch, y_batch
 			if start < m:
-				X_batch = X[start:,:]
-				y_batch = y[start:]
-				yield X_batch, y_batch
+				X_batch.append(X[start:,:])
+				y_batch.append(y[start:])
+			for x,y in zip(X_batch, y_batch):
+				yield x, y
 
-		concat_array = np.c_[self.X_norm, self.y]
-		np.random.shuffle(concat_array)
-		self.X_norm = concat_array[:, :-1]
-		self.y = concat_array[:, -1]
 		for i in range(iter):
+			ft_shuffle_data()
 			for X_batch, y_batch in ft_get_batch(self.X_norm, self.y):
 				diff = np.dot(self.predict(X_batch, self.theta_norm) - y_batch, X_batch)
 				self.J_history.append(self.cost_mbgd(X_batch, y_batch, self.theta_norm))

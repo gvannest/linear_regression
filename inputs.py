@@ -15,6 +15,13 @@ class Data:
 
 		return None
 
+	def update_data(self, new_km, new_prices):
+		self.km = np.append(self.km, new_km)
+		self.price = np.append(self.price, new_prices)
+		self.features = np.c_[np.ones(len(self.km)), self.km]
+		self.normal_equation()
+		return None
+
 
 
 
