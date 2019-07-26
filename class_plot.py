@@ -2,6 +2,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
+
 class GraphLive:
 
 	graph_count = 0

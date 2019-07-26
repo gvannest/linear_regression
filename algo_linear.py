@@ -1,9 +1,6 @@
 import numpy as np
 
-import matplotlib.pyplot as plt
-
 from class_plot import GraphLive
-import linear_regression
 
 class Algo:
 
