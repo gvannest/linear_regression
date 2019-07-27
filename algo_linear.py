@@ -1,8 +1,8 @@
 import numpy as np
-
-from class_plot import GraphLive
 import matplotlib.pyplot as plt
 import pyautogui
+
+from class_plot import GraphLive
 
 
 class Algo:
@@ -130,6 +130,7 @@ class Algo:
 
 	def fit_linear(self, alpha=1, iter=150):
 		m = self.X.shape[0]
+		g1, g2, g3 = None, None, None
 
 		if Algo.flag_plot:
 			fig = plt.figure(figsize=(pyautogui.size()[0] / 96, pyautogui.size()[1] / 96))
@@ -143,20 +144,11 @@ class Algo:
 						   title="Gradient descent", x_label="theta0", y_label="theta1")
 
 		if Algo.gd_algo == "BGD":
-			if Algo.flag_plot:
-				self.batch_gradient(alpha, iter, m, g1=g1, g2=g2, g3=g3)
-			else:
-				self.batch_gradient(alpha, iter, m)
+			self.batch_gradient(alpha, iter, m, g1=g1, g2=g2, g3=g3)
 		elif Algo.gd_algo == "SGD":
-			if Algo.flag_plot:
-				self.stochastic_gradient(alpha, iter, m, g1=g1, g2=g2, g3=g3)
-			else:
-				self.stochastic_gradient(alpha, iter, m)
+			self.stochastic_gradient(alpha, iter, m, g1=g1, g2=g2, g3=g3)
 		elif Algo.gd_algo == "MBGD":
-			if Algo.flag_plot:
-				self.mb_gradient(alpha, iter, m, g1=g1, g2=g2, g3=g3)
-			else:
-				self.mb_gradient(alpha, iter, m)
+			self.mb_gradient(alpha, iter, m, g1=g1, g2=g2, g3=g3)
 
 
 		self.theta[0] = self.theta_norm[0] - self.theta_norm[1] * self.mean_ / self.range_

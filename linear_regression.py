@@ -1,6 +1,6 @@
 import sys
 import argparse
-
+import json
 import numpy as np
 
 import algo_linear
@@ -20,7 +20,7 @@ def ft_argparser():
 	parser.add_argument("-i", "--iterations", type=int, default=150, help="fix number of iterations")
 	parser.add_argument("-a", "--alpha", type=float, default=1, help="fix size of Gradient Descent step")
 	parser.add_argument("-p", "--plot", action="store_true", help="Draw a plot of cost function as GD advances")
-	parser.add_argument("-c", "--confidence", type=float, required=False, choices=np.arange(0, 101, 1) / 100, metavar="[0, 1]", help="Undertake an error analysis and use it to build a confidence interval with the given level of confidence")
+	parser.add_argument("-c", "--confidence", type=float, required=False, choices=np.arange(0, 101, 1), metavar="[0, 1]", help="Undertake an error analysis and use it to build a confidence interval with the given level of confidence")
 	parser.add_argument("-g", "--generator", type=int, required=False, choices=range(1, 1001), metavar="[1, 1000]", help="Add randomly generated data points around regression line.")
 	args = parser.parse_args()
 	return args
@@ -38,6 +38,17 @@ def ft_create_data(data):
 	return data
 
 
+def ft_dump_data(model, prediction_interval):
+	dic_data = {}
+	dic_data['theta'] = list(model.theta)
+	if prediction_interval:
+		dic_data['p_interval'] = prediction_interval.p_interval
+		dic_data['conf_level'] = prediction_interval.confidence
+	with open('trained_data.json', 'w') as file:
+		json.dump(dic_data, file)
+	return None
+
+
 def main(args):
 
 	array_lines = np.genfromtxt(args.data_file, delimiter=',', skip_header=1)
@@ -52,10 +63,13 @@ def main(args):
 
 	model = algo_linear.Algo(X=data.features, y=data.price, true_theta=data.true_theta)
 	model.fit_linear(alpha=args.alpha, iter=args.iterations)
+
+	prediction_interval = None
 	if args.confidence:
-		prediction_interval = Interval(model.theta, data.features, data.price, args.confidence)
+		prediction_interval = Interval(model.theta, data.features, data.price, args.confidence/100)
 		prediction_interval.graphs_residual()
 
+	ft_dump_data(model, prediction_interval)
 
 	return None
 
