@@ -7,7 +7,6 @@ class GraphLive:
 
 	graph_count = 0
 	plt.style.use('ggplot')
-	fig = plt.figure(figsize=(20, 13))
 
 	def __init__(self, x_vec=None, y_vec=None, ax=None, title=None, x_label=None, y_label=None):
 		self.x_vec = x_vec
@@ -17,7 +16,6 @@ class GraphLive:
 		self.title = title
 		self.x_label = x_label
 		self.y_label = y_label
-		GraphLive.graph_count += 1
 
 	def initialization(self, y_limit=None, x_limit=None):
 		self.ax.set_ylim(y_limit)
@@ -46,7 +44,7 @@ class GraphLive:
 			self.line, = self.ax.plot(x_reg, y_reg, '-', alpha=0.8)
 			if true_theta is not None:
 				y_true = true_theta[0] + true_theta[1] * x_reg
-				line_true, = self.ax.plot(x_reg, y_true, '-', color="green", alpha=0.3)
+				self.ax.plot(x_reg, y_true, '-', color="green", alpha=0.3)
 			self.ax.scatter(self.x_vec, self.y_vec, c='blue')
 			plt.tight_layout(4, h_pad=3)
 			plt.show()

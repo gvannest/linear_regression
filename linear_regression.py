@@ -5,7 +5,7 @@ import numpy as np
 
 import algo_linear
 from inputs import Data
-# from interval import Interval
+from interval import Interval
 
 
 def ft_errors(message):
@@ -20,8 +20,8 @@ def ft_argparser():
 	parser.add_argument("-i", "--iterations", type=int, default=150, help="fix number of iterations")
 	parser.add_argument("-a", "--alpha", type=float, default=1, help="fix size of Gradient Descent step")
 	parser.add_argument("-p", "--plot", action="store_true", help="Draw a plot of cost function as GD advances")
-	parser.add_argument("-c", "--confidence", type=float, required=False, choices=np.arange(0.01, 1.01, 0.01), help="Draw a plot of cost function as GD advances")
-	parser.add_argument("-g", "--generator", type=int, required=False, choices=range(1, 10001), help="Add randomly generated data points around regression line.")
+	parser.add_argument("-c", "--confidence", type=float, required=False, choices=np.arange(0, 101, 1) / 100, metavar="[0, 1]", help="Undertake an error analysis and use it to build a confidence interval with the given level of confidence")
+	parser.add_argument("-g", "--generator", type=int, required=False, choices=range(1, 1001), metavar="[1, 1000]", help="Add randomly generated data points around regression line.")
 	args = parser.parse_args()
 	return args
 
@@ -52,7 +52,9 @@ def main(args):
 
 	model = algo_linear.Algo(X=data.features, y=data.price, true_theta=data.true_theta)
 	model.fit_linear(alpha=args.alpha, iter=args.iterations)
-	# prediction_interval = Interval(algo.theta, data.features, data.price)
+	if args.confidence:
+		prediction_interval = Interval(model.theta, data.features, data.price, args.confidence)
+		prediction_interval.graphs_residual()
 
 
 	return None

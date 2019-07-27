@@ -1,6 +1,9 @@
 import numpy as np
 
 from class_plot import GraphLive
+import matplotlib.pyplot as plt
+import pyautogui
+
 
 class Algo:
 
@@ -129,13 +132,14 @@ class Algo:
 		m = self.X.shape[0]
 
 		if Algo.flag_plot:
+			fig = plt.figure(figsize=(pyautogui.size()[0] / 96, pyautogui.size()[1] / 96))
 			g1 = GraphLive(x_vec=np.arange(0, iter), y_vec=np.full(iter, np.nan),
-						   ax=GraphLive.fig.add_subplot(221), title="Real time cost evolution",
+						   ax=fig.add_subplot(221), title="Real time cost evolution",
 						   x_label="Iterations", y_label="J_history")
-			g2 = GraphLive(x_vec=self.X[:,1], y_vec=self.y, ax=GraphLive.fig.add_subplot(222),
+			g2 = GraphLive(x_vec=self.X[:,1], y_vec=self.y, ax=fig.add_subplot(222),
 						   title="Regression line", x_label="Mileage", y_label="Price")
 			g3 = GraphLive(x_vec=np.arange(3000, 10000, 50),
-						   y_vec=np.arange(-12000, 5000, 50), ax=GraphLive.fig.add_subplot(212),
+						   y_vec=np.arange(-12000, 5000, 50), ax=fig.add_subplot(212),
 						   title="Gradient descent", x_label="theta0", y_label="theta1")
 
 		if Algo.gd_algo == "BGD":
