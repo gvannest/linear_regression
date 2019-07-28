@@ -55,7 +55,6 @@ class Algo:
 
 		return None
 
-
 	def batch_gradient(self, alpha, iter, m, **kwargs):
 		for i in range(iter):
 			diff = np.dot(self.predict(self.X_norm, self.theta_norm) - self.y, self.X_norm)
@@ -66,7 +65,6 @@ class Algo:
 				self.dynamic_plots(iter, i, **kwargs)
 
 		return None
-
 
 	def stochastic_gradient(self, alpha, iter, m, **kwargs):
 
@@ -87,7 +85,6 @@ class Algo:
 			if Algo.flag_plot :
 				self.dynamic_plots(iter, i, **kwargs)
 		return None
-
 
 	def mb_gradient(self, alpha, iter, m, **kwargs):
 
@@ -127,7 +124,6 @@ class Algo:
 
 		return None
 
-
 	def fit_linear(self, alpha=1, iter=150):
 		m = self.X.shape[0]
 		g1, g2, g3 = None, None, None
@@ -140,7 +136,7 @@ class Algo:
 			g2 = GraphLive(x_vec=self.X[:,1], y_vec=self.y, ax=fig.add_subplot(222),
 						   title="Regression line", x_label="Mileage", y_label="Price")
 			g3 = GraphLive(x_vec=np.arange(3000, 10000, 50),
-						   y_vec=np.arange(-12000, 5000, 50), ax=fig.add_subplot(212),
+						   y_vec=np.arange(-15000, 10000, 50), ax=fig.add_subplot(212),
 						   title="Gradient descent", x_label="theta0", y_label="theta1")
 
 		if Algo.gd_algo == "BGD":
@@ -149,7 +145,6 @@ class Algo:
 			self.stochastic_gradient(alpha, iter, m, g1=g1, g2=g2, g3=g3)
 		elif Algo.gd_algo == "MBGD":
 			self.mb_gradient(alpha, iter, m, g1=g1, g2=g2, g3=g3)
-
 
 		self.theta[0] = self.theta_norm[0] - self.theta_norm[1] * self.mean_ / self.range_
 		self.theta[1] = self.theta_norm[1] / self.range_

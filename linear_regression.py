@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import argparse
 import json
@@ -6,6 +8,7 @@ import numpy as np
 import algo_linear
 from inputs import Data
 from interval import Interval
+from class_plot import GraphLive
 
 
 def ft_errors(message):
@@ -14,14 +17,34 @@ def ft_errors(message):
 
 
 def ft_argparser():
+
+	def range_iter(value_string):
+		value = int(value_string)
+		if value not in range(0, 5001):
+			raise argparse.ArgumentTypeError(f"{value} is out of range, choose in [0-5000]")
+		return value
+
+	def range_conf(value_string):
+		value = float(value_string)
+		if value not in range(0, 101):
+			raise argparse.ArgumentTypeError(f"{value} is out of range, choose in [0-100]")
+		return value
+
+	def range_gen(value_string):
+		value = int(value_string)
+		if value not in range(0, 1001):
+			raise argparse.ArgumentTypeError(f"{value} is out of range, choose in [0-1001]")
+		return value
+
 	parser = argparse.ArgumentParser()
 	parser.add_argument("data_file", type=str, help="csv file containing the training examples which will feed the linear_regression algorithm")
 	parser.add_argument("-m", "--method", type=str, default="BGD", choices=["BGD", "MBGD", "SGD"], help="Type of gradient descent algorithm: Batch GD, Mini-Batch GD or Stochastic GD")
-	parser.add_argument("-i", "--iterations", type=int, default=150, help="fix number of iterations")
-	parser.add_argument("-a", "--alpha", type=float, default=1, help="fix size of Gradient Descent step")
-	parser.add_argument("-p", "--plot", action="store_true", help="Draw a plot of cost function as GD advances")
-	parser.add_argument("-c", "--confidence", type=float, required=False, choices=np.arange(0, 101, 1), metavar="[0, 1]", help="Undertake an error analysis and use it to build a confidence interval with the given level of confidence")
-	parser.add_argument("-g", "--generator", type=int, required=False, choices=range(1, 1001), metavar="[1, 1000]", help="Add randomly generated data points around regression line.")
+	parser.add_argument("-i", "--iterations", type=range_iter, default=150, choices=range(0, 5001), metavar="[0, 5000]", help="Fix number of iterations. Capped at 5000.")
+	parser.add_argument("-a", "--alpha", type=float, default=1, help="Fix size of Gradient Descent step.")
+	parser.add_argument("-p", "--plot", action="store_true", help="Draw a plot of cost function as GD advances. you can combine with flag -auto for autoscaling.")
+	parser.add_argument("-auto", "--autoscale", action="store_true", help="When -p is True, autoscale the y_axis of the cost function")
+	parser.add_argument("-c", "--confidence", type=range_conf, required=False, choices=range(0, 101), metavar="[0, 100]", help="Undertake an error analysis and use it to build a confidence interval with the given level of confidence")
+	parser.add_argument("-g", "--generator", type=range_gen, required=False, choices=range(1, 1001), metavar="[1, 1000]", help="Add randomly generated data points around regression line.")
 	args = parser.parse_args()
 	return args
 
@@ -55,6 +78,7 @@ def main(args):
 
 	algo_linear.Algo.flag_plot = True if args.plot else False
 	algo_linear.Algo.gd_algo = args.method
+	GraphLive.auto_scale = args.autoscale
 
 	data = Data(array_lines)
 	data.normal_equation()
@@ -67,7 +91,8 @@ def main(args):
 	prediction_interval = None
 	if args.confidence:
 		prediction_interval = Interval(model.theta, data.features, data.price, args.confidence/100)
-		prediction_interval.graphs_residual()
+		if args.plot:
+			prediction_interval.graphs_residual()
 
 	ft_dump_data(model, prediction_interval)
 
