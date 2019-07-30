@@ -57,7 +57,7 @@ data_file        | csv file containing the training examples which will feed the
 
 **Optional arguments :**
 
-|Short flag             | Long flag              | Description            |
+|Short flag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;             | Long flag              | Description            |
 :----------------------|:-----------------------| :-----------------------|
   -h                   | --help                 | Show help message
   -m {BGD, MBGD, SGD}    | --method             | Type of gradient descent algorithm. Choices are  : BGD (Batch GD), MBGD (Mini-Batch GD) or SGD (Stochastic GD)
