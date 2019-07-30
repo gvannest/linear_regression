@@ -83,7 +83,7 @@ In case you have not trained the regression parameters, the program will warn yo
 
 The `./linear_regression.py` program will create a `trained_data.json` file with the thetas (i.e. regression parameters) recorded for further use in the `./predict.py` program.  
 
-<img src="img/linear_reg+screenshot+thetas.png" alt="Results of linear_reg" width="200"/> 
+<img src="img/linear_reg+screenshot+thetas.png" alt="Results of linear_reg" width="800"/> 
 
 
 The `./predict.py` program will print on stdout the estimated price of a car with the mileage provided.
