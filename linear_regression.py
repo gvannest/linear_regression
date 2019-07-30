@@ -5,10 +5,10 @@ import argparse
 import json
 import numpy as np
 
-import algo_linear
-from inputs import Data
-from interval import Interval
-from class_plot import GraphLive
+import py_files.algo_linear as algo_linear
+from py_files.inputs import Data
+from py_files.interval import Interval
+from py_files.class_plot import GraphLive
 
 
 def ft_errors(message):

@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pyautogui
 
-from class_plot import GraphLive
+from py_files.class_plot import GraphLive
 
 
 class Algo:
