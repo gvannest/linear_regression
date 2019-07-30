@@ -88,6 +88,8 @@ The `./linear_regression.py` program will create a `trained_data.json` file with
 
 The `./predict.py` program will print on stdout the estimated price of a car with the mileage provided.
 
+<img src="img/predict_resutl_screenshot.png" alt="Prediction" width="700"/> 
+
 
 
 
