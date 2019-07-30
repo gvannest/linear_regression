@@ -57,16 +57,16 @@ data_file        | csv file containing the training examples which will feed the
 
 **Optional arguments :**
 
-Short flag       | Long flag              | Description
-:----------------|:-----------------------| :---------------------------|
-  -h             | --help                 | Show help message
+Short flag          | Long flag              | Description
+:-------------------|:-----------------------| :---------------------------|
+  -h                | --help                 | Show help message
   -m {BGD, MBGD, SGD} | --method               | Type of gradient descent algorithm. Choices are  : BGD (Batch GD), MBGD (Mini-Batch GD) or SGD (Stochastic GD)
-  -i [0-5000]   | --iterations           | Fix number of iterations. Capped at 5000.
-  -a             | --alpha                | Fix size of Gradient Descent step.
-  -p             | --plot                 | Draw a real time plot of cost function, gradient descent and linear fit as GD advances. If -c is on, plot an analysis of residuals and prediction interval after the training. You can combine with flag -auto for autoscaling.
-  -auto          | --autoscale            | When -p is True, autoscale the y_axis of the cost function (allows for better visualization in case of divergence)
-  -c [0-100]     | --confidence           | Undertake an error analysis and use it to build a confidence interval with the given level of confidence
-  -g [1-1000]    | --generator            | Add randomly generated data points around regression line.
+  -i [0-5000]      | --iterations           | Fix number of iterations. Capped at 5000.
+  -a                | --alpha                | Fix size of Gradient Descent step.
+  -p                | --plot                 | Draw a real time plot of cost function, gradient descent and linear fit as GD advances. If -c is on, plot an analysis of residuals and prediction interval after the training. You can combine with flag -auto for autoscaling.
+  -auto             | --autoscale            | When -p is True, autoscale the y_axis of the cost function (allows for better visualization in case of divergence)
+  -c [0-100]        | --confidence           | Undertake an error analysis and use it to build a confidence interval with the given level of confidence
+  -g [1-1000]       | --generator            | Add randomly generated data points around regression line.
   
   
 
